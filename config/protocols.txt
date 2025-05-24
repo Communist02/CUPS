@@ -1,0 +1,4 @@
+ipp://
+socket://
+usb://
+smb://

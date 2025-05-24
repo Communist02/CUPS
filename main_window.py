@@ -87,11 +87,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.comboBox_protocol = QComboBox(self.printers_search)
-        self.comboBox_protocol.addItem("")
-        self.comboBox_protocol.addItem("")
-        self.comboBox_protocol.addItem("")
-        self.comboBox_protocol.addItem("")
         self.comboBox_protocol.setObjectName(u"comboBox_protocol")
+        self.comboBox_protocol.setEditable(True)
 
         self.horizontalLayout.addWidget(self.comboBox_protocol)
 
@@ -169,11 +166,6 @@ class Ui_MainWindow(object):
         self.action_show_tasks.setText(QCoreApplication.translate("MainWindow", u"Show tasks", None))
         self.lineEdit_search.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a", None))
         self.button_search.setText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a", None))
-        self.comboBox_protocol.setItemText(0, QCoreApplication.translate("MainWindow", u"ipp://", None))
-        self.comboBox_protocol.setItemText(1, QCoreApplication.translate("MainWindow", u"socket://", None))
-        self.comboBox_protocol.setItemText(2, QCoreApplication.translate("MainWindow", u"usb://", None))
-        self.comboBox_protocol.setItemText(3, QCoreApplication.translate("MainWindow", u"smb://", None))
-
 #if QT_CONFIG(tooltip)
         self.comboBox_protocol.setToolTip(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u043e\u0440 \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u0430", None))
 #endif // QT_CONFIG(tooltip)

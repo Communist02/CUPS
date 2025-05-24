@@ -71,26 +71,9 @@
             <property name="toolTip">
              <string>Выбор протокола</string>
             </property>
-            <item>
-             <property name="text">
-              <string>ipp://</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>socket://</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>usb://</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>smb://</string>
-             </property>
-            </item>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>

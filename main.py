@@ -1,20 +1,17 @@
-import asyncio
-import signal
 import sys
 import os
 import subprocess
-import types
 import json
 
-from PySide6.QtCore import QFileInfo, QLibraryInfo, QLocale, QMimeData, QPoint, QSettings, QSize, QTranslator, QUrl, Qt
-from PySide6.QtGui import QColorConstants, QDesktopServices, QDrag, QDragEnterEvent, QIcon, QAction, QCursor, QKeySequence, QPainter, QPixmap, QShortcut
-from PySide6.QtWidgets import QFileIconProvider, QInputDialog, QMainWindow, QApplication, QDialog, QMenu, QFileDialog, QSizePolicy, QStyleFactory, QSystemTrayIcon, QTreeWidgetItem, QPushButton, QMessageBox, QLabel
-import PySide6.QtAsyncio as QtAsyncio
+from PySide6.QtCore import QLibraryInfo, QLocale, QSettings, QTranslator, Qt
+from PySide6.QtGui import QIcon, QAction, QCursor
+from PySide6.QtWidgets import QMainWindow, QApplication, QDialog, QMenu, QStyleFactory, QTreeWidgetItem, QMessageBox
 
 import main_window
 import settings_window
 
 from palettes import palettes
+
 
 class SettingsWindow(QDialog):
     def __init__(self):
@@ -58,11 +55,14 @@ class MainWindow(QMainWindow):
 
         self.ui.action_settings.triggered.connect(self.open_settings_window)
         self.ui.action_exit.triggered.connect(self.close)
-        self.ui.action_about.triggered.connect(lambda: QMessageBox.aboutQt(self))
+        self.ui.action_about.triggered.connect(
+            lambda: QMessageBox.aboutQt(self))
 
-        self.ui.treeWidget_list.customContextMenuRequested.connect(self.show_context_menu_tree_search)
+        self.ui.treeWidget_list.customContextMenuRequested.connect(
+            self.show_context_menu_tree_search)
 
         self.search()
+        self.update_protocols()
 
         # self.shortcuts()
 
@@ -73,17 +73,22 @@ class MainWindow(QMainWindow):
         open_win = SettingsWindow()
         open_win.exec()
 
+    def update_protocols(self):
+        self.ui.comboBox_protocol.clear()
+        with open('config/protocols.txt', 'r') as file:
+            for line in file:
+                self.ui.comboBox_protocol.addItem(line.strip())
+
     def search(self):
         text = self.ui.lineEdit_search.text()
 
-        with open('list.json', 'r') as file:
+        with open('config/list.json', 'r') as file:
             data: dict = json.load(file)
-        print(data)
 
         self.ui.statusbar.showMessage('Поиск')
 
         self.ui.treeWidget_list.clear()
-        
+
         for key, value in data.items():
             if key.lower().rfind(text.lower()) != -1:
                 item = QTreeWidgetItem()
@@ -92,7 +97,7 @@ class MainWindow(QMainWindow):
                 self.ui.treeWidget_list.addTopLevelItem(item)
 
         self.ui.statusbar.showMessage('')
-    
+
     def link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
             item = self.ui.treeWidget_list.currentItem()
@@ -105,9 +110,10 @@ class MainWindow(QMainWindow):
                 driver = 'everywhere'
             else:
                 driver = item.text(1)
-            command = f'lpadmin -p {item.text(0)} -v {protocol} -E -m {driver}'
+            command = f'lpadmin -p "{item.text(0)}" -v {protocol}{self.ui.lineEdit.text()} -E -m "{driver}"'
             print(command)
-            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            process = subprocess.Popen(
+                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             OUT, _ = process.communicate()
             OUT = OUT.decode()
 
@@ -146,6 +152,7 @@ class MainWindow(QMainWindow):
 
         menu.exec(QCursor.pos())
 
+
 if __name__ == '__main__':
     app = QApplication()
     settings = QSettings('Denis Mazur', 'P Explorer')
@@ -162,8 +169,7 @@ if __name__ == '__main__':
     if translator.load(f'{os.path.dirname(__file__) + os.sep}translations{os.sep}{QLocale.system().language().name}.qm'):
         app.installTranslator(translator)
 
-
     window = MainWindow()
     window.show()
 
-    sys.exit(QtAsyncio.run())
+    sys.exit(app.exec())
