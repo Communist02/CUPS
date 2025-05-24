@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
             item = None
 
         if item is not None:
-            protocol = self.ui.comboBox.currentText()
+            protocol = self.ui.comboBox_protocol.currentText()
             if self.ui.checkBox_auto.isChecked():
                 driver = 'everywhere'
             else:
