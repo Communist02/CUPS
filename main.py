@@ -64,8 +64,6 @@ class MainWindow(QMainWindow):
         self.search()
         self.update_protocols()
 
-        # self.shortcuts()
-
     def timer_update(self):
         pass
 
@@ -110,14 +108,31 @@ class MainWindow(QMainWindow):
                 driver = 'everywhere'
             else:
                 driver = item.text(1)
-            command = f'lpadmin -p "{item.text(0)}" -v {protocol}{self.ui.lineEdit.text()} -E -m "{driver}"'
+
+            if driver != '':
+                driver = f'-m "{driver}"'
+
+            command = f'lpadmin -p "{item.text(0)}" -v {protocol}{self.ui.lineEdit.text()} -E {driver}'
             print(command)
             process = subprocess.Popen(
                 command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            OUT, _ = process.communicate()
+            OUT, ERR = process.communicate()
             OUT = OUT.decode()
+            ERR = ERR.decode()
 
             print(OUT)
+            print(ERR)
+
+            command = f'lpoptions -d "{item.text(0)}"'
+            print(command)
+            process = subprocess.Popen(
+                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            OUT, ERR = process.communicate()
+            OUT = OUT.decode()
+            ERR = ERR.decode()
+
+            print(OUT)
+            print(ERR)
 
     def create_link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
@@ -134,19 +149,17 @@ class MainWindow(QMainWindow):
         if not index.isValid():
             return
 
-        item = self.ui.treeWidget_list.itemAt(point)
+        # item = self.ui.treeWidget_list.itemAt(point)
 
         menu = QMenu()
 
         action = QAction(self)
         action.setText('Подключить')
-        action.setIcon(QIcon.fromTheme('system-file-manager'))
         action.triggered.connect(self.link)
         menu.addAction(action)
 
         action = QAction(self)
         action.setText('Создать ярлык')
-        action.setIcon(QIcon.fromTheme('system-file-manager'))
         action.triggered.connect(self.create_link)
         menu.addAction(action)
 
