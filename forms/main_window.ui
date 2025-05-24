@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">P Explorer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="printer"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="printers_search">
+       <attribute name="icon">
+        <iconset theme="printer"/>
+       </attribute>
+       <attribute name="title">
+        <string>Принтеры</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_search">
+            <property name="placeholderText">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_search">
+            <property name="text">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QComboBox" name="comboBox_protocol">
+            <property name="toolTip">
+             <string>Выбор протокола</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>ipp://</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>socket://</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>usb://</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>smb://</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit">
+            <property name="placeholderText">
+             <string>URI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_auto">
+            <property name="toolTip">
+             <string>Использовать автоматический подбор драйвера</string>
+            </property>
+            <property name="text">
+             <string>Автоматический драйвер</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_create_link">
+            <property name="text">
+             <string>Создать ярлык</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_link">
+            <property name="text">
+             <string>Подключить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeWidget_list">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          </property>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Модель</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Драйвер</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuClient">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="action_settings"/>
+    <addaction name="separator"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menuOther">
+    <property name="title">
+     <string>Другое</string>
+    </property>
+    <addaction name="action_about"/>
+   </widget>
+   <addaction name="menuClient"/>
+   <addaction name="menuOther"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <action name="action_new_remote">
+   <property name="icon">
+    <iconset theme="system-file-manager"/>
+   </property>
+   <property name="text">
+    <string>New remote</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="icon">
+    <iconset theme="application-exit"/>
+   </property>
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="icon">
+    <iconset theme="help-about"/>
+   </property>
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="action_list_remotes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>List remotes</string>
+   </property>
+  </action>
+  <action name="action_new_serve">
+   <property name="icon">
+    <iconset theme="applications-internet"/>
+   </property>
+   <property name="text">
+    <string>New serve</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="icon">
+    <iconset theme="applications-development"/>
+   </property>
+   <property name="text">
+    <string>Настройки</string>
+   </property>
+  </action>
+  <action name="action_show_tasks">
+   <property name="text">
+    <string>Show tasks</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
