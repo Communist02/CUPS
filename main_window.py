@@ -220,6 +220,40 @@ class Ui_MainWindow(object):
 
         icon6 = QIcon(QIcon.fromTheme(u"list-add"))
         self.tabWidget.addTab(self.tab_add, icon6, "")
+        self.tab_drivers = QWidget()
+        self.tab_drivers.setObjectName(u"tab_drivers")
+        self.verticalLayout_5 = QVBoxLayout(self.tab_drivers)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setContentsMargins(0, -1, 0, -1)
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.pushButton_drivers_update = QPushButton(self.tab_drivers)
+        self.pushButton_drivers_update.setObjectName(u"pushButton_drivers_update")
+
+        self.horizontalLayout_6.addWidget(self.pushButton_drivers_update)
+
+        self.lineEdit_drivers_search = QLineEdit(self.tab_drivers)
+        self.lineEdit_drivers_search.setObjectName(u"lineEdit_drivers_search")
+
+        self.horizontalLayout_6.addWidget(self.lineEdit_drivers_search)
+
+        self.pushButton_drivers_search = QPushButton(self.tab_drivers)
+        self.pushButton_drivers_search.setObjectName(u"pushButton_drivers_search")
+
+        self.horizontalLayout_6.addWidget(self.pushButton_drivers_search)
+
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_6)
+
+        self.treeWidget_drivers = QTreeWidget(self.tab_drivers)
+        self.treeWidget_drivers.setObjectName(u"treeWidget_drivers")
+        self.treeWidget_drivers.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.treeWidget_drivers.setRootIsDecorated(False)
+        self.treeWidget_drivers.setSortingEnabled(True)
+
+        self.verticalLayout_5.addWidget(self.treeWidget_drivers)
+
+        self.tabWidget.addTab(self.tab_drivers, icon5, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
 
@@ -279,7 +313,7 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem = self.treeWidget_list.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"URI", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440", None));
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0435\u043b\u044c", None));
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"\u0418\u043c\u044f", None));
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.printers_search), QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440\u044b", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u0418\u043c\u044f", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435", None))
@@ -288,6 +322,13 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440", None))
         self.pushButton_add.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_add), QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c", None))
+        self.pushButton_drivers_update.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
+        self.lineEdit_drivers_search.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a", None))
+        self.pushButton_drivers_search.setText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a", None))
+        ___qtreewidgetitem1 = self.treeWidget_drivers.headerItem()
+        ___qtreewidgetitem1.setText(1, QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440", None));
+        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0435\u043b\u044c", None));
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_drivers), QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440\u044b", None))
         self.menuClient.setTitle(QCoreApplication.translate("MainWindow", u"\u0424\u0430\u0439\u043b", None))
         self.menuOther.setTitle(QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0443\u0433\u043e\u0435", None))
         pass

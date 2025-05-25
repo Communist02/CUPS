@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_link.clicked.connect(self.link)
         self.ui.pushButton_create_link.clicked.connect(self.create_link)
         self.ui.pushButton_add.clicked.connect(self.add_printer)
+        self.ui.pushButton_drivers_update.clicked.connect(self.drivers_update)
 
         self.ui.action_settings.triggered.connect(self.open_settings_window)
         self.ui.action_exit.triggered.connect(self.close)
@@ -63,10 +64,8 @@ class MainWindow(QMainWindow):
             self.show_context_menu_tree_search)
 
         self.search()
+        self.drivers_seach()
         self.update_protocols()
-
-    def timer_update(self):
-        pass
 
     def open_settings_window(self):
         open_win = SettingsWindow()
@@ -101,6 +100,37 @@ class MainWindow(QMainWindow):
 
         self.ui.statusbar.showMessage('')
 
+    def drivers_seach(self):
+        text = self.ui.lineEdit_search.text()
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'r') as file:
+            data: dict = json.load(file)
+
+        self.ui.treeWidget_list.clear()
+
+        for key, value in data.items():
+            if key.lower().rfind(text.lower()) != -1:
+                item = QTreeWidgetItem()
+                item.setText(0, key)
+                item.setText(1, value)
+                self.ui.treeWidget_drivers.addTopLevelItem(item)
+
+    def drivers_update(self):
+        command = 'lpinfo -m'
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        OUT, ERR = process.communicate()
+        OUT = OUT.decode()
+        ERR = ERR.decode()
+
+        print(OUT)
+        print(ERR)
+
+        # with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
+        #     file.write(json.dumps(data, sort_keys=True))
+
+        self.drivers_seach()
+
     def add_printer(self):
         name = self.ui.lineEdit_add_name.text().strip()
         desc = self.ui.lineEdit_desc.text().strip()
@@ -115,6 +145,8 @@ class MainWindow(QMainWindow):
 
         with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
             file.write(json.dumps(data, sort_keys=True))
+        
+        self.ui.statusbar.showMessage('Добавлен принтер ' + name)
 
         self.search()
 
