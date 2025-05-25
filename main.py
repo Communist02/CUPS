@@ -4,7 +4,7 @@ import subprocess
 import json
 
 from PySide6.QtCore import QLibraryInfo, QLocale, QSettings, QTranslator, Qt
-from PySide6.QtGui import QIcon, QAction, QCursor
+from PySide6.QtGui import QAction, QCursor, QGuiApplication
 from PySide6.QtWidgets import QMainWindow, QApplication, QDialog, QMenu, QStyleFactory, QTreeWidgetItem, QMessageBox
 
 import main_window
@@ -108,6 +108,7 @@ class MainWindow(QMainWindow):
             data: dict = json.load(file)
 
         self.ui.treeWidget_list.clear()
+        self.ui.comboBox_add_driver.clear()
 
         for key, value in data.items():
             if value.lower().rfind(text.lower()) != -1:
@@ -115,6 +116,7 @@ class MainWindow(QMainWindow):
                 item.setText(1, key)
                 item.setText(0, value)
                 self.ui.treeWidget_drivers.addTopLevelItem(item)
+                self.ui.comboBox_add_driver.addItem(key)
 
     def drivers_update(self):
         command = 'lpinfo -m'
@@ -244,6 +246,32 @@ class MainWindow(QMainWindow):
         action = QAction(self)
         action.setText('Удалить')
         action.triggered.connect(lambda: self.delete_printer(item.text(0)))
+        menu.addAction(action)
+
+        menu.exec(QCursor.pos())
+
+    def show_context_menu_drivers(self, point):
+        index = self.ui.treeWidget_list.indexAt(point)
+
+        if not index.isValid():
+            return
+
+        item = self.ui.treeWidget_list.itemAt(point)
+
+        menu = QMenu()
+
+        def copy(text: str):
+            clipboard = QGuiApplication.clipboard()
+            clipboard.setText(text)
+
+        action = QAction(self)
+        action.setText('Копировать драйвер')
+        action.triggered.connect(lambda: copy(item.text(1)))
+        menu.addAction(action)
+
+        action = QAction(self)
+        action.setText('Копировать модель')
+        action.triggered.connect(lambda: copy(item.text(0)))
         menu.addAction(action)
 
         menu.exec(QCursor.pos())
