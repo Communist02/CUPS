@@ -109,25 +109,31 @@ class MainWindow(QMainWindow):
         self.ui.treeWidget_list.clear()
 
         for key, value in data.items():
-            if key.lower().rfind(text.lower()) != -1:
+            if value.lower().rfind(text.lower()) != -1:
                 item = QTreeWidgetItem()
-                item.setText(0, key)
-                item.setText(1, value)
+                item.setText(1, key)
+                item.setText(0, value)
                 self.ui.treeWidget_drivers.addTopLevelItem(item)
 
     def drivers_update(self):
         command = 'lpinfo -m'
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        OUT, ERR = process.communicate()
+        OUT, _ = process.communicate()
         OUT = OUT.decode()
-        ERR = ERR.decode()
 
         print(OUT)
-        print(ERR)
 
-        # with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
-        #     file.write(json.dumps(data, sort_keys=True))
+        list_drivers = OUT.split('\n')
+        drivers: dict = {}
+
+        for s in list_drivers:
+            driver = s[:s.find(' ')]
+            model = s[s.find(' ')+1:]
+            drivers[driver] = model
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'w') as file:
+            file.write(json.dumps(drivers, sort_keys=True))
 
         self.drivers_seach()
 
