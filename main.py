@@ -54,6 +54,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_create_link.clicked.connect(self.create_link)
         self.ui.pushButton_add.clicked.connect(self.add_printer)
         self.ui.pushButton_drivers_update.clicked.connect(self.drivers_update)
+        self.ui.pushButton_drivers_search.clicked.connect(self.drivers_seach)
 
         self.ui.action_settings.triggered.connect(self.open_settings_window)
         self.ui.action_exit.triggered.connect(self.close)
