@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.ui.treeWidget_list.header().setSortIndicator(0, Qt.SortOrder.AscendingOrder)
+        self.ui.treeWidget_drivers.header().setSortIndicator(0, Qt.SortOrder.AscendingOrder)
 
         self.ui.pushButton_search.clicked.connect(self.search)
         self.ui.lineEdit_search.editingFinished.connect(self.search)
@@ -63,6 +64,8 @@ class MainWindow(QMainWindow):
 
         self.ui.treeWidget_list.customContextMenuRequested.connect(
             self.show_context_menu_tree_search)
+        self.ui.treeWidget_drivers.customContextMenuRequested.connect(
+            self.show_context_menu_drivers)
 
         self.search()
         self.drivers_seach()
@@ -102,12 +105,12 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.showMessage('')
 
     def drivers_seach(self):
-        text = self.ui.lineEdit_search.text()
+        text = self.ui.lineEdit_drivers_search.text()
 
         with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'r') as file:
             data: dict = json.load(file)
 
-        self.ui.treeWidget_list.clear()
+        self.ui.treeWidget_drivers.clear()
         self.ui.comboBox_add_driver.clear()
 
         for key, value in data.items():
@@ -147,6 +150,8 @@ class MainWindow(QMainWindow):
         ) + self.ui.lineEdit_add_uri.text().strip()
         driver = self.ui.comboBox_add_driver.currentText().strip()
 
+        self.ui.statusbar.showMessage('')
+
         with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
             data: dict = json.load(file)
 
@@ -154,10 +159,10 @@ class MainWindow(QMainWindow):
 
         with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
             file.write(json.dumps(data, sort_keys=True))
-        
-        self.ui.statusbar.showMessage('Добавлен принтер ' + name)
 
         self.search()
+
+        self.ui.statusbar.showMessage('Добавлен принтер ' + name)
 
     def link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
@@ -251,12 +256,12 @@ class MainWindow(QMainWindow):
         menu.exec(QCursor.pos())
 
     def show_context_menu_drivers(self, point):
-        index = self.ui.treeWidget_list.indexAt(point)
+        index = self.ui.treeWidget_drivers.indexAt(point)
 
         if not index.isValid():
             return
 
-        item = self.ui.treeWidget_list.itemAt(point)
+        item = self.ui.treeWidget_drivers.itemAt(point)
 
         menu = QMenu()
 
