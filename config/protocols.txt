@@ -1,4 +1,6 @@
 ipp://
+http://
 socket://
 usb://
 smb://
+lpd://

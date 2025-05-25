@@ -56,7 +56,26 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_search">
+           <widget class="QComboBox" name="comboBox_search_mode">
+            <item>
+             <property name="text">
+              <string>Показывать все</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Только, где есть URI</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Только, где нет URI</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_search">
             <property name="text">
              <string>Поиск</string>
             </property>
@@ -77,7 +96,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="lineEdit_uri">
             <property name="placeholderText">
              <string>URI</string>
             </property>
@@ -94,14 +113,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_create_link">
+           <widget class="QPushButton" name="pushButton_create_link">
             <property name="text">
              <string>Создать ярлык</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_link">
+           <widget class="QPushButton" name="pushButton_link">
             <property name="text">
              <string>Подключить</string>
             </property>
@@ -130,7 +149,125 @@
             <string>Драйвер</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>URI</string>
+           </property>
+          </column>
          </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_add">
+       <attribute name="icon">
+        <iconset theme="list-add"/>
+       </attribute>
+       <attribute name="title">
+        <string>Добавить</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Имя</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_add_name"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Описание</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_desc"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QComboBox" name="comboBox_add_protocol">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Протокол</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_add_uri">
+            <property name="placeholderText">
+             <string>URI</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Драйвер</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_add_driver">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_add">
+          <property name="text">
+           <string>Добавить</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>

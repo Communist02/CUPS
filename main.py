@@ -48,10 +48,11 @@ class MainWindow(QMainWindow):
 
         self.ui.treeWidget_list.header().setSortIndicator(0, Qt.SortOrder.AscendingOrder)
 
-        self.ui.button_search.clicked.connect(self.search)
+        self.ui.pushButton_search.clicked.connect(self.search)
         self.ui.lineEdit_search.editingFinished.connect(self.search)
-        self.ui.button_link.clicked.connect(self.link)
-        self.ui.button_create_link.clicked.connect(self.create_link)
+        self.ui.pushButton_link.clicked.connect(self.link)
+        self.ui.pushButton_create_link.clicked.connect(self.create_link)
+        self.ui.pushButton_add.clicked.connect(self.add_printer)
 
         self.ui.action_settings.triggered.connect(self.open_settings_window)
         self.ui.action_exit.triggered.connect(self.close)
@@ -73,14 +74,16 @@ class MainWindow(QMainWindow):
 
     def update_protocols(self):
         self.ui.comboBox_protocol.clear()
-        with open('config/protocols.txt', 'r') as file:
+        self.ui.comboBox_add_protocol.clear()
+        with open(os.path.dirname(__file__) + os.sep + 'config/protocols.txt', 'r') as file:
             for line in file:
                 self.ui.comboBox_protocol.addItem(line.strip())
+                self.ui.comboBox_add_protocol.addItem(line.strip())
 
     def search(self):
         text = self.ui.lineEdit_search.text()
 
-        with open('config/list.json', 'r') as file:
+        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
             data: dict = json.load(file)
 
         self.ui.statusbar.showMessage('Поиск')
@@ -89,12 +92,31 @@ class MainWindow(QMainWindow):
 
         for key, value in data.items():
             if key.lower().rfind(text.lower()) != -1:
-                item = QTreeWidgetItem()
-                item.setText(0, key)
-                item.setText(1, value[0])
-                self.ui.treeWidget_list.addTopLevelItem(item)
+                if self.ui.comboBox_search_mode.currentIndex() == 0 or self.ui.comboBox_search_mode.currentIndex() == 1 and value.get('uri', '') != '' or self.ui.comboBox_search_mode.currentIndex() == 2 and value.get('uri', '') == '':
+                    item = QTreeWidgetItem()
+                    item.setText(0, key)
+                    item.setText(1, value['driver'])
+                    item.setText(2, value.get('uri', ''))
+                    self.ui.treeWidget_list.addTopLevelItem(item)
 
         self.ui.statusbar.showMessage('')
+
+    def add_printer(self):
+        name = self.ui.lineEdit_add_name.text().strip()
+        desc = self.ui.lineEdit_desc.text().strip()
+        uri = self.ui.comboBox_add_protocol.currentText(
+        ) + self.ui.lineEdit_add_uri.text().strip()
+        driver = self.ui.comboBox_add_driver.currentText().strip()
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
+            data: dict = json.load(file)
+
+        data[name] = {'name': name, 'desc': desc, 'uri': uri, 'driver': driver}
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
+            file.write(json.dumps(data, sort_keys=True))
+
+        self.search()
 
     def link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
@@ -112,7 +134,11 @@ class MainWindow(QMainWindow):
             if driver != '':
                 driver = f'-m "{driver}"'
 
-            command = f'lpadmin -p "{item.text(0)}" -v {protocol}{self.ui.lineEdit.text()} -E {driver}'
+            uri = f'{protocol}{self.ui.lineEdit_uri.text()}'
+            if item.text(2) != '':
+                uri = item.text(2)
+
+            command = f'lpadmin -p "{item.text(0)}" -v {uri} -E {driver}'
             print(command)
             process = subprocess.Popen(
                 command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -123,16 +149,16 @@ class MainWindow(QMainWindow):
             print(OUT)
             print(ERR)
 
-            command = f'lpoptions -d "{item.text(0)}"'
-            print(command)
-            process = subprocess.Popen(
-                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            OUT, ERR = process.communicate()
-            OUT = OUT.decode()
-            ERR = ERR.decode()
+            # command = f'lpoptions -d "{item.text(0)}"'
+            # print(command)
+            # process = subprocess.Popen(
+            #     command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # OUT, ERR = process.communicate()
+            # OUT = OUT.decode()
+            # ERR = ERR.decode()
 
-            print(OUT)
-            print(ERR)
+            # print(OUT)
+            # print(ERR)
 
     def create_link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
@@ -143,13 +169,24 @@ class MainWindow(QMainWindow):
         if item is not None:
             print(item.text(0))
 
+    def delete_printer(self, name: str):
+        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
+            data: dict = json.load(file)
+
+        data.pop(name)
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
+            file.write(json.dumps(data, sort_keys=True))
+
+        self.search()
+
     def show_context_menu_tree_search(self, point):
         index = self.ui.treeWidget_list.indexAt(point)
 
         if not index.isValid():
             return
 
-        # item = self.ui.treeWidget_list.itemAt(point)
+        item = self.ui.treeWidget_list.itemAt(point)
 
         menu = QMenu()
 
@@ -161,6 +198,13 @@ class MainWindow(QMainWindow):
         action = QAction(self)
         action.setText('Создать ярлык')
         action.triggered.connect(self.create_link)
+        menu.addAction(action)
+
+        menu.addSeparator()
+
+        action = QAction(self)
+        action.setText('Удалить')
+        action.triggered.connect(lambda: self.delete_printer(item.text(0)))
         menu.addAction(action)
 
         menu.exec(QCursor.pos())
