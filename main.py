@@ -85,9 +85,13 @@ class MainWindow(QMainWindow):
 
     def search(self):
         text = self.ui.lineEdit_search.text()
-
-        with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
-            data: dict = json.load(file)
+        try:
+            with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
+                data: dict = json.load(file)
+        except FileNotFoundError:
+            data: dict = {}
+            with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'w') as file:
+                file.write(json.dumps(data))
 
         self.ui.statusbar.showMessage('Поиск')
 
@@ -106,9 +110,11 @@ class MainWindow(QMainWindow):
 
     def drivers_seach(self):
         text = self.ui.lineEdit_drivers_search.text()
-
-        with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'r') as file:
-            data: dict = json.load(file)
+        try:
+            with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'r') as file:
+                data: dict = json.load(file)
+        except json.decoder.JSONDecodeError and FileNotFoundError:
+            data: dict = {}
 
         self.ui.treeWidget_drivers.clear()
         self.ui.comboBox_add_driver.clear()
@@ -136,7 +142,8 @@ class MainWindow(QMainWindow):
         for s in list_drivers:
             driver = s[:s.find(' ')]
             model = s[s.find(' ')+1:]
-            drivers[driver] = model
+            if driver != '':
+                drivers[driver] = model
 
         with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'w') as file:
             file.write(json.dumps(drivers, sort_keys=True))
