@@ -1,3 +1,4 @@
+from ast import Name
 import sys
 import os
 import subprocess
@@ -51,11 +52,17 @@ class MainWindow(QMainWindow):
 
         self.ui.pushButton_search.clicked.connect(self.search)
         self.ui.lineEdit_search.editingFinished.connect(self.search)
+        self.ui.lineEdit_drivers_search.editingFinished.connect(self.drivers_search)
+        self.ui.lineEdit_linked_search.editingFinished.connect(self.linked_search)
+        self.ui.lineEdit_scan_search.editingFinished.connect(self.scan_search)
         self.ui.pushButton_link.clicked.connect(self.link)
-        self.ui.pushButton_create_link.clicked.connect(self.create_link)
         self.ui.pushButton_add.clicked.connect(self.add_printer)
         self.ui.pushButton_drivers_update.clicked.connect(self.drivers_update)
-        self.ui.pushButton_drivers_search.clicked.connect(self.drivers_seach)
+        self.ui.pushButton_drivers_search.clicked.connect(self.drivers_search)
+        self.ui.pushButton_scan_search.clicked.connect(self.scan_search)
+        self.ui.pushButton_scan_update.clicked.connect(self.scan_update)
+        self.ui.pushButton_scan_update.clicked.connect(self.linked_update)
+        self.ui.pushButton_scan_create_link.clicked.connect(self.create_link)
 
         self.ui.action_settings.triggered.connect(self.open_settings_window)
         self.ui.action_exit.triggered.connect(self.close)
@@ -66,9 +73,15 @@ class MainWindow(QMainWindow):
             self.show_context_menu_tree_search)
         self.ui.treeWidget_drivers.customContextMenuRequested.connect(
             self.show_context_menu_drivers)
+        self.ui.treeWidget_linked.customContextMenuRequested.connect(
+            self.show_context_menu_linked)
+        self.ui.treeWidget_scan.customContextMenuRequested.connect(
+            self.show_context_menu_tree_scan)
 
         self.search()
-        self.drivers_seach()
+        self.drivers_search()
+        self.scan_search()
+        self.linked_search()
         self.update_protocols()
 
     def open_settings_window(self):
@@ -108,7 +121,7 @@ class MainWindow(QMainWindow):
 
         self.ui.statusbar.showMessage('')
 
-    def drivers_seach(self):
+    def drivers_search(self):
         text = self.ui.lineEdit_drivers_search.text()
         try:
             with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'r') as file:
@@ -126,6 +139,87 @@ class MainWindow(QMainWindow):
                 item.setText(0, value)
                 self.ui.treeWidget_drivers.addTopLevelItem(item)
                 self.ui.comboBox_add_driver.addItem(key)
+
+    def linked_search(self):
+        text = self.ui.lineEdit_linked_search.text()
+        try:
+            with open(os.path.dirname(__file__) + os.sep + 'config/linked.json', 'r') as file:
+                data: dict = json.load(file)
+        except json.decoder.JSONDecodeError and FileNotFoundError:
+            data: dict = {}
+
+        self.ui.treeWidget_linked.clear()
+
+        for key, value in data.items():
+            if value.lower().rfind(text.lower()) != -1:
+                item = QTreeWidgetItem()
+                item.setText(1, key)
+                item.setText(0, value)
+                self.ui.treeWidget_linked.addTopLevelItem(item)
+                self.ui.comboBox_add_driver.addItem(key)
+
+    def scan_search(self):
+        text = self.ui.lineEdit_scan_search.text()
+        try:
+            with open(os.path.dirname(__file__) + os.sep + 'config/scan.json', 'r') as file:
+                data: dict = json.load(file)
+        except json.decoder.JSONDecodeError and FileNotFoundError:
+            data: dict = {}
+
+        self.ui.treeWidget_scan.clear()
+
+        for key, value in data.items():
+            if value.lower().rfind(text.lower()) != -1:
+                item = QTreeWidgetItem()
+                item.setText(1, key)
+                item.setText(0, value)
+                self.ui.treeWidget_scan.addTopLevelItem(item)
+
+    def scan_update(self):
+        command = 'scanimage -L'
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        OUT, _ = process.communicate()
+        OUT = OUT.decode()
+
+        print(OUT)
+
+        list_out = OUT.split('\n')
+        data: dict = {}
+
+        for s in list_out:
+            addr = s[s.find('device')+8:s.find("' is a")]
+            model = s[s.find('is a')+5:]
+            if addr != '':
+                data[addr] = model
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/scan.json', 'w') as file:
+            file.write(json.dumps(data, sort_keys=True))
+
+        self.scan_search()
+
+    def linked_update(self):
+        command = 'lpinfo -v | grep usb:'
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        OUT, _ = process.communicate()
+        OUT = OUT.decode()
+
+        print(OUT)
+
+        list_out = OUT.split('\n')
+        data: dict = {}
+
+        for s in list_out:
+            uri = s[s.find(' '):]
+            model = ''
+            if uri != '':
+                data[uri] = model
+
+        with open(os.path.dirname(__file__) + os.sep + 'config/linked.json', 'w') as file:
+            file.write(json.dumps(data, sort_keys=True))
+
+        self.linked_search()
 
     def drivers_update(self):
         command = 'lpinfo -m'
@@ -213,14 +307,41 @@ class MainWindow(QMainWindow):
             # print(OUT)
             # print(ERR)
 
+    def add_and_link(self):
+        self.add_printer()
+        name = self.ui.lineEdit_add_name.text().strip()
+        desc = self.ui.lineEdit_desc.text().strip()
+        uri = self.ui.comboBox_add_protocol.currentText(
+        ) + self.ui.lineEdit_add_uri.text().strip()
+        driver = self.ui.comboBox_add_driver.currentText().strip()
+        command = f'lpadmin -p "{Name}" -v {uri} -E {driver}'
+        print(command)
+
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        OUT, ERR = process.communicate()
+        OUT = OUT.decode()
+        ERR = ERR.decode()
+
+        print(OUT)
+        print(ERR)
+
     def create_link(self, item: QTreeWidgetItem = None):
         if item is None or item == False:
-            item = self.ui.treeWidget_list.currentItem()
+            item = self.ui.treeWidget_scan.currentItem()
         else:
             item = None
 
         if item is not None:
-            print(item.text(0))
+            s = '[Desktop Entry]\n'
+            s += f'Name={item.text(0)}\n'
+            s += 'Version=1.0.0\n'
+            s += f'Exec=simple-scan {item.text(1)}\n'
+            s += 'Terminal=False\n'
+            s += 'Categories=Graphics;Scanning\n'
+
+            with open(os.path.join(os.path.expanduser('~'), 'Рабочий стол') + f'/{item.text(0)}.desktop', 'w') as file:
+                file.write(s)
 
     def delete_printer(self, name: str):
         with open(os.path.dirname(__file__) + os.sep + 'config/list.json', 'r') as file:
@@ -262,6 +383,37 @@ class MainWindow(QMainWindow):
 
         menu.exec(QCursor.pos())
 
+    def show_context_menu_tree_scan(self, point):
+        index = self.ui.treeWidget_scan.indexAt(point)
+
+        if not index.isValid():
+            return
+        
+        def copy(text: str):
+            clipboard = QGuiApplication.clipboard()
+            clipboard.setText(text)
+
+        item = self.ui.treeWidget_scan.itemAt(point)
+
+        menu = QMenu()
+
+        action = QAction(self)
+        action.setText('Создать ярлык')
+        action.triggered.connect(self.create_link)
+        menu.addAction(action)
+
+        action = QAction(self)
+        action.setText('Копировать URI')
+        action.triggered.connect(lambda: copy(item.text(1)))
+        menu.addAction(action)
+
+        action = QAction(self)
+        action.setText('Копировать модель')
+        action.triggered.connect(lambda: copy(item.text(0)))
+        menu.addAction(action)
+
+        menu.exec(QCursor.pos())
+
     def show_context_menu_drivers(self, point):
         index = self.ui.treeWidget_drivers.indexAt(point)
 
@@ -284,6 +436,27 @@ class MainWindow(QMainWindow):
         action = QAction(self)
         action.setText('Копировать модель')
         action.triggered.connect(lambda: copy(item.text(0)))
+        menu.addAction(action)
+
+        menu.exec(QCursor.pos())
+
+    def show_context_menu_linked(self, point):
+        index = self.ui.treeWidget_linked.indexAt(point)
+
+        if not index.isValid():
+            return
+
+        item = self.ui.treeWidget_linked.itemAt(point)
+
+        menu = QMenu()
+
+        def copy(text: str):
+            clipboard = QGuiApplication.clipboard()
+            clipboard.setText(text)
+
+        action = QAction(self)
+        action.setText('Копировать URI')
+        action.triggered.connect(lambda: copy(item.text(1)))
         menu.addAction(action)
 
         menu.exec(QCursor.pos())

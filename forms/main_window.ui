@@ -37,7 +37,7 @@
         <iconset theme="printer"/>
        </attribute>
        <attribute name="title">
-        <string>Принтеры</string>
+        <string>Сохраненные конфиги</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="leftMargin">
@@ -109,13 +109,6 @@
             </property>
             <property name="text">
              <string>Автоматический драйвер</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_create_link">
-            <property name="text">
-             <string>Создать ярлык</string>
             </property>
            </widget>
           </item>
@@ -257,6 +250,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="pushButton_add_and_link">
+          <property name="text">
+           <string>Добавить и подключить</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
@@ -335,6 +335,123 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_linked">
+       <attribute name="title">
+        <string>Подключенные принтеры</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QPushButton" name="pushButton_linked_update">
+            <property name="text">
+             <string>Обновить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_linked_search">
+            <property name="placeholderText">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_linked_search">
+            <property name="text">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeWidget_linked">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          </property>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Модель</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Драйвер</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_scan">
+       <attribute name="title">
+        <string>Сканеры</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QPushButton" name="pushButton_scan_update">
+            <property name="text">
+             <string>Обновить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_scan_search">
+            <property name="placeholderText">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_scan_create_link">
+            <property name="text">
+             <string>Создать ярлык</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_scan_search">
+            <property name="text">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeWidget_scan">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          </property>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Модель</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>URI</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -345,7 +462,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>33</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuClient">
