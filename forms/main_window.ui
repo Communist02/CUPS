@@ -32,6 +32,67 @@
       <property name="documentMode">
        <bool>true</bool>
       </property>
+      <widget class="QWidget" name="tab_linked_all">
+       <attribute name="title">
+        <string>Подключенные принтеры</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QPushButton" name="pushButton_linked_all_update">
+            <property name="text">
+             <string>Обновить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_linked_all_search">
+            <property name="placeholderText">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_linked_all_search">
+            <property name="text">
+             <string>Поиск</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="treeWidget_linked_all">
+          <property name="contextMenuPolicy">
+           <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+          </property>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Имя</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>URI</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="printers_search">
        <attribute name="icon">
         <iconset theme="printer"/>
@@ -104,6 +165,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="checkBox_auto">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="toolTip">
              <string>Использовать автоматический подбор драйвера</string>
             </property>
@@ -337,9 +401,15 @@
       </widget>
       <widget class="QWidget" name="tab_linked">
        <attribute name="title">
-        <string>Подключенные принтеры</string>
+        <string>Доступные USB принтеры</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_7">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
@@ -383,7 +453,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Драйвер</string>
+            <string>URI</string>
            </property>
           </column>
          </widget>
@@ -395,6 +465,12 @@
         <string>Сканеры</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_8">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
