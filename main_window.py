@@ -96,8 +96,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addWidget(self.treeWidget_linked_all)
 
-        icon6 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.AddressBookNew))
-        self.tabWidget.addTab(self.tab_linked_all, icon6, "")
+        self.tabWidget.addTab(self.tab_linked_all, icon, "")
         self.tab_add = QWidget()
         self.tab_add.setObjectName(u"tab_add")
         self.verticalLayout_2 = QVBoxLayout(self.tab_add)
@@ -213,13 +212,8 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.pushButton_add_and_link)
 
-        self.pushButton_add = QPushButton(self.tab_add)
-        self.pushButton_add.setObjectName(u"pushButton_add")
-
-        self.verticalLayout_2.addWidget(self.pushButton_add)
-
-        icon7 = QIcon(QIcon.fromTheme(u"list-add"))
-        self.tabWidget.addTab(self.tab_add, icon7, "")
+        icon6 = QIcon(QIcon.fromTheme(u"list-add"))
+        self.tabWidget.addTab(self.tab_add, icon6, "")
         self.tab_scan = QWidget()
         self.tab_scan.setObjectName(u"tab_scan")
         self.verticalLayout_8 = QVBoxLayout(self.tab_scan)
@@ -322,7 +316,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.treeWidget_list)
 
-        self.tabWidget.addTab(self.printers_search, icon, "")
+        self.tabWidget.addTab(self.printers_search, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
 
@@ -384,7 +378,6 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem1.setText(1, QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440", None));
         ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0435\u043b\u044c", None));
         self.pushButton_add_and_link.setText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0438\u0442\u044c", None))
-        self.pushButton_add.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u043a\u043e\u043d\u0444\u0438\u0433", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_add), QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u0438\u043d\u0442\u0435\u0440", None))
         self.pushButton_scan_update.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
         self.lineEdit_scan_search.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041f\u043e\u0438\u0441\u043a", None))
@@ -413,7 +406,7 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem3.setText(2, QCoreApplication.translate("MainWindow", u"URI", None));
         ___qtreewidgetitem3.setText(1, QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0430\u0439\u0432\u0435\u0440", None));
         ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"\u0418\u043c\u044f", None));
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.printers_search), QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u043d\u044b\u0435 \u043a\u043e\u043d\u0444\u0438\u0433\u0438", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.printers_search), QCoreApplication.translate("MainWindow", u"\u0418\u0441\u0442\u043e\u0440\u0438\u044f", None))
         self.menuClient.setTitle(QCoreApplication.translate("MainWindow", u"\u0424\u0430\u0439\u043b", None))
         self.menuOther.setTitle(QCoreApplication.translate("MainWindow", u"\u0414\u0440\u0443\u0433\u043e\u0435", None))
         pass

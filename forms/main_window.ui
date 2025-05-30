@@ -28,7 +28,7 @@
       </property>
       <widget class="QWidget" name="tab_linked_all">
        <attribute name="icon">
-        <iconset theme="QIcon::ThemeIcon::AddressBookNew"/>
+        <iconset theme="printer"/>
        </attribute>
        <attribute name="title">
         <string>Подключенные принтеры</string>
@@ -246,13 +246,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_add">
-          <property name="text">
-           <string>Добавить в конфиг</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_scan">
@@ -324,11 +317,8 @@
        </layout>
       </widget>
       <widget class="QWidget" name="printers_search">
-       <attribute name="icon">
-        <iconset theme="printer"/>
-       </attribute>
        <attribute name="title">
-        <string>Сохраненные конфиги</string>
+        <string>История</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="leftMargin">

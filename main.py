@@ -149,7 +149,6 @@ class MainWindow(QMainWindow):
             self.drivers_search)
         self.ui.lineEdit_scan_search.editingFinished.connect(self.scan_search)
         self.ui.pushButton_link.clicked.connect(self.link)
-        self.ui.pushButton_add.clicked.connect(self.add_printer)
         self.ui.pushButton_add_and_link.clicked.connect(self.add_and_link)
         self.ui.pushButton_drivers_update.clicked.connect(self.drivers_update)
         self.ui.pushButton_drivers_search.clicked.connect(self.drivers_search)
