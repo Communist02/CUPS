@@ -385,9 +385,6 @@
           </item>
           <item>
            <widget class="QCheckBox" name="checkBox_auto">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
             <property name="toolTip">
              <string>Использовать автоматический подбор драйвера</string>
             </property>
@@ -445,7 +442,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>24</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuClient">

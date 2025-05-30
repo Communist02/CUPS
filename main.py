@@ -179,6 +179,8 @@ class MainWindow(QMainWindow):
 
         self.ui.treeWidget_drivers.itemSelectionChanged.connect(
             self.select_driver)
+        
+        self.ui.checkBox_auto.hide()
 
         self.search()
         self.drivers_search()

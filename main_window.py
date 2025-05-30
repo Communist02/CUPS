@@ -296,7 +296,6 @@ class Ui_MainWindow(object):
 
         self.checkBox_auto = QCheckBox(self.printers_search)
         self.checkBox_auto.setObjectName(u"checkBox_auto")
-        self.checkBox_auto.setEnabled(False)
 
         self.horizontalLayout.addWidget(self.checkBox_auto)
 
@@ -323,7 +322,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1280, 24))
+        self.menubar.setGeometry(QRect(0, 0, 1280, 33))
         self.menuClient = QMenu(self.menubar)
         self.menuClient.setObjectName(u"menuClient")
         self.menuOther = QMenu(self.menubar)
