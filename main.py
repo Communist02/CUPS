@@ -47,6 +47,8 @@ class USBWindow(QDialog):
         self.ui = usb_window.Ui_USBWindow()
         self.ui.setupUi(self)
 
+        self.ui.treeWidget_linked.header().resizeSection(0, 500)
+
         self.ui.lineEdit_linked_search.editingFinished.connect(
             self.linked_search)
         self.ui.pushButton_linked_update.clicked.connect(self.linked_update)
@@ -188,7 +190,7 @@ class MainWindow(QMainWindow):
     def open_settings_window(self):
         open_win = SettingsWindow()
         open_win.exec()
-    
+
     def open_usb_window(self):
         open_win = USBWindow()
         open_win.exec()
@@ -288,6 +290,9 @@ class MainWindow(QMainWindow):
 
     def scan_update(self):
         command = 'scanimage -L'
+
+        self.ui.statusbar.showMessage('Обновление списка сканеров')
+
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         OUT, _ = process.communicate()
@@ -299,6 +304,8 @@ class MainWindow(QMainWindow):
         data: dict = {}
 
         for s in list_out:
+            if s.find('No scanners were identified') == -1:
+                break
             addr = s[s.find('device')+8:s.find("' is a")]
             model = s[s.find('is a')+5:]
             if addr != '':
@@ -307,10 +314,16 @@ class MainWindow(QMainWindow):
         with open(os.path.dirname(__file__) + os.sep + 'config/scan.json', 'w') as file:
             file.write(json.dumps(data, sort_keys=True))
 
+        self.ui.statusbar.showMessage('')
+
         self.scan_search()
 
     def linked_all_update(self):
         command = 'lpstat -v'
+
+        self.ui.statusbar.showMessage(
+            'Обновление списка подключенных принтеров')
+
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         OUT, _ = process.communicate()
@@ -330,10 +343,15 @@ class MainWindow(QMainWindow):
         with open(os.path.dirname(__file__) + os.sep + 'config/linked_all.json', 'w') as file:
             file.write(json.dumps(data, sort_keys=True))
 
+        self.ui.statusbar.showMessage('')
+
         self.linked_all_search()
 
     def drivers_update(self):
         command = 'lpinfo -m'
+
+        self.ui.statusbar.showMessage('Обновление списка драйверов')
+
         process = subprocess.Popen(
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         OUT, _ = process.communicate()
@@ -352,6 +370,8 @@ class MainWindow(QMainWindow):
 
         with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'w') as file:
             file.write(json.dumps(drivers, sort_keys=True))
+
+        self.ui.statusbar.showMessage('')
 
         self.drivers_search()
 
