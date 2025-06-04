@@ -306,7 +306,7 @@ class MainWindow(QMainWindow):
         data: dict = {}
 
         for s in list_out:
-            if s.find('No scanners were identified') == -1:
+            if s.find('No scanners were identified') != -1:
                 break
             addr = s[s.find('device')+8:s.find("' is a")]
             model = s[s.find('is a')+5:]
@@ -316,7 +316,7 @@ class MainWindow(QMainWindow):
         with open(os.path.dirname(__file__) + os.sep + 'config/scan.json', 'w') as file:
             file.write(json.dumps(data, sort_keys=True))
 
-        self.ui.statusbar.showMessage('')
+        self.ui.statusbar.showMessage('Обновление списка сканеров завершено')
 
         self.scan_search()
 
@@ -373,7 +373,7 @@ class MainWindow(QMainWindow):
         with open(os.path.dirname(__file__) + os.sep + 'config/drivers.json', 'w') as file:
             file.write(json.dumps(drivers, sort_keys=True))
 
-        self.ui.statusbar.showMessage('')
+        self.ui.statusbar.showMessage('Обновление списка драйверов завершено')
 
         self.drivers_search()
 
@@ -447,7 +447,7 @@ class MainWindow(QMainWindow):
         uri = self.ui.comboBox_add_protocol.currentText(
         ) + self.ui.lineEdit_add_uri.text().strip()
         driver = self.ui.comboBox_add_driver.currentText().strip()
-        command = f'lpadmin -p "{name}" -v {uri} -E {driver}'
+        command = f'lpadmin -p "{name}" -v {uri} -E -m {driver}'
         print(command)
 
         process = subprocess.Popen(
@@ -455,6 +455,8 @@ class MainWindow(QMainWindow):
         OUT, ERR = process.communicate()
         OUT = OUT.decode()
         ERR = ERR.decode()
+
+        self.linked_all_update()
 
         print(OUT)
         print(ERR)
@@ -465,16 +467,26 @@ class MainWindow(QMainWindow):
         else:
             item = None
 
+        username = os.getenv('SUDO_USER') or os.getenv('USER')
+        if username:
+            desktop_path = os.path.join('/home', username, 'Desktop')
+        else:
+            desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+
         if item is not None:
             s = '[Desktop Entry]\n'
             s += f'Name={item.text(0)}\n'
+            s += 'Type=Application\n'
+            s += 'NoDisplay=false\n'
+            s += 'Hidden=false\n'
+            s += 'StartupNotify=false\n'
             s += 'Version=1.0.0\n'
             s += f'Exec=simple-scan {item.text(1)}\n'
             s += 'Terminal=False\n'
             s += 'Categories=Graphics;Scanning\n'
-            s += 'Icon=org.gnome.SimpleScan'
+            s += 'Icon=org.gnome.SimpleScan\n'
 
-            with open(os.path.join(os.path.expanduser('~'), 'Desktop') + f'/{item.text(0)}.desktop', 'w') as file:
+            with open(desktop_path + f'/{item.text(0)}.desktop', 'w') as file:
                 file.write(s)
 
     def delete_printer_config(self, name: str):
@@ -587,7 +599,7 @@ class MainWindow(QMainWindow):
 
         print(OUT)
         print(ERR)
-        self.linked_all_search()
+        self.linked_all_update()
 
     def show_context_menu_tree_linked_all(self, point):
         index = self.ui.treeWidget_linked_all.indexAt(point)
